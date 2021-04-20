@@ -40,3 +40,6 @@ vignettes/*.pdf
 
 # Debug file
 debug.R
+
+# Output files created by targets
+_targets/
