@@ -22,12 +22,16 @@ check:
 install:
 	Rscript -e 'devtools::install()'
 
+.PHONY: lint
+lint:
+	Rscript -e 'lintr::lint_package()'
+
 .PHONY: run
 run:
 	Rscript -e 'targets::tar_make()' 2>&1 | tee log/run.log
 
 .PHONY: all
-all: document check install run
+all: document check install lint run
 
 .PHONY: clean
 clean:
