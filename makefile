@@ -18,6 +18,10 @@ document:
 check:
 	Rscript -e 'devtools::check()'
 
+.PHONY: lint
+lint:
+	Rscript -e 'lintr::lint_package()'
+
 .PHONY: install
 install:
 	Rscript -e 'devtools::install()'
@@ -27,7 +31,7 @@ run:
 	Rscript -e 'targets::tar_make()' 2>&1 | tee log/run.log
 
 .PHONY: all
-all: document check install run
+all: document check lint install run
 
 .PHONY: clean
 clean:
