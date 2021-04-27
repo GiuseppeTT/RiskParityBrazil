@@ -1,0 +1,35 @@
+- asset: "IFIX L"
+  index: "IFIL"
+  first_year: 2017
+
+- asset: "IFIX"
+  index: "IFIX"
+  first_year: 2010
+
+- asset: "IBrX 50"
+  index: "IBXL"
+  first_year: 1997
+
+- asset: "IBOV"
+  index: "IBOVESPA"
+  first_year: 1968
+
+- asset: "IBrX 100"
+  index: "IBXX"
+  first_year: 1994
+
+- asset: "IBrA"
+  index: "IBRA"
+  first_year: 2005
+
+- asset: "IGCT"
+  index: "IGCT"
+  first_year: 2005
+
+- asset: "IGC"
+  index: "IGCX"
+  first_year: 2001
+
+- asset: "IDIV"
+  index: "IDIV"
+  first_year: 2005

@@ -1,6 +1,7 @@
 ^_targets\.R$
 ^_targets$
 ^\.lintr$
+^config$
 ^debug\.R$
 ^log$
 ^makefile$
