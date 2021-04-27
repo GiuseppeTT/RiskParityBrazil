@@ -10,3 +10,4 @@ NULL
 
 # The following commands prevent some R check complaints
 utils::globalVariables(".")
+utils::globalVariables("where")

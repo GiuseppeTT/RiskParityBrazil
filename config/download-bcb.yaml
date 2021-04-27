@@ -1,0 +1,43 @@
+- asset: "CDI"
+  series: 12
+  unit: "return"
+
+- asset: "SELIC"
+  series: 11
+  unit: "return"
+
+- asset: "IPCA"
+  series: 433
+  unit: "return"
+
+- asset: "IMA"
+  series: 12469
+  unit: "price"
+
+- asset: "IMA-S"
+  series: 12462
+  unit: "price"
+
+- asset: "IMA-B"
+  series: 12466
+  unit: "price"
+
+- asset: "IMA-B 5"
+  series: 12467
+  unit: "price"
+
+- asset: "IMA-B 5+"
+  series: 12468
+  unit: "price"
+
+- asset: "IRF-M"
+  series: 12461
+  unit: "price"
+
+- asset: "IRF-M 1"
+  series: 17626
+  unit: "price"
+
+- asset: "IRF-M 1+"
+  series: 17627
+  unit: "price"

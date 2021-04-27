@@ -15,12 +15,27 @@ License: MIT + file LICENSE
 URL: https://github.com/GiuseppeTT/RiskParityBrazil,
     https://giuseppett.github.io/RiskParityBrazil/
 Imports:
+    dplyr,
+    fs,
+    glue,
     here,
+    httr,
+    jsonlite,
+    lubridate,
     magrittr,
+    PerformanceAnalytics,
+    purrr,
     qs,
+    readr,
     rlang (>= 0.1.2),
+    rvest,
+    stringr,
     tarchetypes (>= 0.1.1),
-    targets (>= 0.4.1)
+    targets (>= 0.4.1),
+    tibble,
+    tidyr,
+    xts,
+    zoo
 Suggests:
     devtools,
     languageserver,
