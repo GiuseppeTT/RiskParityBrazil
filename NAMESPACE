@@ -3,6 +3,7 @@
 export("%>%")
 export(":=")
 export(.data)
+export(analyze_data)
 export(as_label)
 export(as_name)
 export(asset_types)

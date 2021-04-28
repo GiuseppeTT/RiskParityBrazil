@@ -101,7 +101,17 @@ process_targets <- list(
     )
 )
 
+analysis_targets <- list(
+    tar_target(
+        analysis,
+        analyze_data(packed_data),
+        pattern = map(packed_data),
+        iteration = "list"
+    )
+)
+
 list(
     download_targets,
-    process_targets
+    process_targets,
+    analysis_targets
 )

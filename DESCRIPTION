@@ -17,6 +17,7 @@ URL: https://github.com/GiuseppeTT/RiskParityBrazil,
 Imports:
     dplyr,
     fs,
+    ggplot2,
     glue,
     here,
     httr,
@@ -29,11 +30,15 @@ Imports:
     readr,
     rlang (>= 0.1.2),
     rvest,
+    scales,
+    slider,
     stringr,
     tarchetypes (>= 0.1.1),
     targets (>= 0.4.1),
     tibble,
     tidyr,
+    tidyselect,
+    vctrs,
     xts,
     zoo
 Suggests:
