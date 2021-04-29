@@ -1,0 +1,70 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v1
+
+      - name: Setup pandoc (for R Markdown)
+        uses: r-lib/actions/setup-pandoc@v1
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get install libcurl4-openssl-dev
+
+      - name: Cache R packages
+        if: runner.os != 'Windows'
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-r-${{ hashFiles('DESCRIPTION') }}
+          restore-keys: ${{ runner.os }}-r-
+
+      - name: Install R dependencies
+        run: |
+          install.packages(c("remotes", "devtools"))
+          remotes::install_deps(dependencies = TRUE)
+        shell: Rscript {0}
+
+      - name: Install package
+        run: |
+          devtools::install()
+        shell: Rscript {0}
+
+      - name: Cache targets
+        uses: actions/cache@v2
+        with:
+          path: ./_targets
+          key: ${{ runner.os }}-targets-${{ hashFiles('_targets.R') }}
+          restore-keys: ${{ runner.os }}-targets-
+
+      - name: Run targets
+        run: |
+          options(crayon.enabled = TRUE)
+          targets::tar_make()
+        shell: Rscript {0}
+
+      - name: Remove gitignore files from github-pages folder for deploy
+        run: |
+          rm output/github-pages/.gitignore
+          rm output/github-pages/**/.gitignore
+
+      - name: Deploy dashboards to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          branch: gh-pages
+          folder: output/github-pages
