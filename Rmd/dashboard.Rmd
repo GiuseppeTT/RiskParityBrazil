@@ -1,0 +1,126 @@
+---
+title: "Risk Parity Brazil"
+output:
+    flexdashboard::flex_dashboard:
+        orientation: columns
+        vertical_layout: fill
+        theme: flatly
+        source_code: https://github.com/GiuseppeTT/RiskParityBrazil
+params:
+    analysis: NULL
+---
+
+```{js desinvert navbar}
+$('.navbar-inverse').removeClass('navbar-inverse').addClass('navbar-default');
+```
+
+```{r setup, include = FALSE}
+`%>%` <- magrittr::`%>%`
+
+percentage_columns <- function(
+    data,
+    accuracy = 0.1
+) {
+    data %>%
+        dplyr::mutate(dplyr::across(
+            tidyselect:::where(is.numeric),
+            scales::percent,
+            accuracy = accuracy
+        )) %>%
+        return()
+}
+
+analysis <-
+    params %>%
+    magrittr::extract2("analysis") %>%
+    magrittr::extract2(1)
+```
+
+Summary
+================================================================================
+
+Column {.tabset .tabset-fade}
+--------------------------------------------------------------------------------
+
+### Metrics
+```{r metrics table}
+analysis %>%
+    magrittr::extract2("summary") %>%
+    magrittr::extract2("metrics_table") %>%
+    percentage_columns() %>%
+    knitr::kable()
+```
+
+Gain
+================================================================================
+
+Column {.tabset .tabset-fade}
+--------------------------------------------------------------------------------
+
+### Price
+```{r price plot}
+analysis %>%
+    magrittr::extract2("gain") %>%
+    magrittr::extract2("price_plot") %>%
+    plotly::ggplotly()
+```
+
+### DCA multiple
+```{r DCA multiple plot}
+analysis %>%
+    magrittr::extract2("gain") %>%
+    magrittr::extract2("dca_multiple_plot") %>%
+    plotly::ggplotly()
+```
+
+### Rolling CAGR
+```{r rolling CAGR plot}
+analysis %>%
+    magrittr::extract2("gain") %>%
+    magrittr::extract2("rolling_cagr_plot") %>%
+    plotly::ggplotly()
+```
+
+Risk
+================================================================================
+
+Column {.tabset .tabset-fade}
+--------------------------------------------------------------------------------
+
+### Smooth volatility
+```{r smooth volatility plot}
+analysis %>%
+    magrittr::extract2("risk") %>%
+    magrittr::extract2("smooth_volatility_plot") %>%
+    plotly::ggplotly()
+```
+
+### Drawdown
+```{r drawdown plot}
+analysis %>%
+    magrittr::extract2("risk") %>%
+    magrittr::extract2("drawdown_plot") %>%
+    plotly::ggplotly()
+```
+
+Relation
+================================================================================
+
+Column {.tabset .tabset-fade}
+--------------------------------------------------------------------------------
+
+### Smooth correlation
+```{r smooth correlation plot}
+analysis %>%
+    magrittr::extract2("relation") %>%
+    magrittr::extract2("smooth_correlation_plot") %>%
+    plotly::ggplotly()
+```
+
+### Theoretical weight
+```{r theoretical weight plot}
+analysis %>%
+    magrittr::extract2("relation") %>%
+    magrittr::extract2("theoretical_weight_plot") %>%
+    plotly::ggplotly()
+```

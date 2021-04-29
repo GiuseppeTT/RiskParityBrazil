@@ -1,0 +1,43 @@
+---
+title: "Risk Parity Brazil"
+description: "An analysis of risk parity applied to the Brazilian stock market."
+author: Giuseppe Tinti Tomio
+output: distill::distill_article
+repository_url: https://github.com/GiuseppeTT/RiskParityBrazil
+---
+
+```{r setup, include = FALSE}
+`%>%` <- magrittr::`%>%`
+
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Disclaimer
+This is not an investment advice. I am not your investment advisor. The analysis conducted here is for pure academic purposes. You should conduct your own research and understand the risks before investing. Past performance is no guarantee of future results.
+
+I have directly and/or indirectly invested in related products and methods present in this document. Thus, there might be conflict of interests.
+
+## Dashboards
+Dashboards:
+
+```{r dashboards, results = "asis"}
+pack_config <-
+    here::here("config/pack.yaml") %>%
+    yaml::read_yaml()
+
+dashboard_names <-
+    pack_config %>%
+    purrr::map_chr("name")
+
+base_url <- "https://giuseppett.github.io/RiskParityBrazil/dashboard/"
+
+dashboard_names %>%
+    purrr::walk(~ cat(glue::glue("- [{.x}]({base_url}{RiskParityBrazil::name_dashboard_file(.x)})\n\n")))
+```
+
+## Details
+Details:
+
+- The risk parity portfolios are built using one-year rolling volatilities and are rebalanced yearly.
+- The smooth plots use an exponential weighted moving average (EWMA) with a smoothing parameter equivalent to a halflife of one month.
+- One should be careful before drawing conclusions due to the sample size. Although 20 years may seem like a lot, this period was characterized by a descrese in the interest rates, which pumps up bond returns.

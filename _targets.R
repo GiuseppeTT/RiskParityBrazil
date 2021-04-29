@@ -110,8 +110,31 @@ analysis_targets <- list(
     )
 )
 
+dashboard_targets <- list(
+    tar_render(
+        index,
+        here::here("Rmd/index.Rmd"),
+        output_file = here::here("output/github-pages/index.html")
+    ),
+    tar_target(
+        output_file,
+        here::here("output/github-pages/dashboard", name_dashboard_file(pack_config$name)),
+        pattern = map(pack_config),
+        iteration = "vector"
+    ),
+    tar_render_rep(
+        dashboard,
+        here::here("Rmd/dashboard.Rmd"),
+        params = tibble::tibble(
+            analysis = analysis,
+            output_file = output_file
+        )
+    )
+)
+
 list(
     download_targets,
     process_targets,
-    analysis_targets
+    analysis_targets,
+    dashboard_targets
 )
