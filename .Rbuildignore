@@ -2,9 +2,14 @@
 ^_targets$
 ^\.github$
 ^\.lintr$
+^app\.R$
 ^config$
 ^debug\.R$
+^functions\.R$
+^global\.R$
 ^log$
 ^makefile$
 ^output$
 ^Rmd$
+^server\.R$
+^ui\.R$

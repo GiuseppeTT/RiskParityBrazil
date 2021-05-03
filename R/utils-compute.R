@@ -32,12 +32,10 @@ compute_dca_multiple <- function(
 
 compute_rolling_cagr <- function(
     return_,
-    date,
     window_size
 ) {
     return_ %>%
-        slider::slide_index_dbl(
-            date,
+        slider::slide_dbl(
             ~ trading_days_per$year * expm1(mean(log1p(.x))),
             .before = window_size,
             .complete = TRUE
@@ -99,12 +97,10 @@ compute_smooth_correlation <- function(
 
 compute_rolling_inverse_volatility <- function(
     return_,
-    date,
     window_size
 ) {
     return_ %>%
-        slider::slide_index_dbl(
-            date,
+        slider::slide_dbl(
             ~ 1 / stats::sd(.x, na.rm = TRUE),
             .before = window_size,
             .complete = TRUE

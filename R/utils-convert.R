@@ -69,7 +69,6 @@ convert_return_to_rolling_cagr <- function(
         dplyr::arrange(.data$date) %>%
         dplyr::mutate(rolling_CAGR = compute_rolling_cagr(
             .data$return,
-            .data$date,
             window_size
         )) %>%
         dplyr::ungroup()
@@ -163,7 +162,6 @@ convert_return_to_theoretical_weight <- function(
         dplyr::arrange(.data$date) %>%
         dplyr::mutate(inverse_volatility = compute_rolling_inverse_volatility(
             .data$return,
-            .data$date,
             window_size
         )) %>%
         dplyr::ungroup()
