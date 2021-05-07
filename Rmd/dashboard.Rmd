@@ -17,19 +17,6 @@ $('.navbar-inverse').removeClass('navbar-inverse').addClass('navbar-default');
 ```{r setup, include = FALSE}
 `%>%` <- magrittr::`%>%`
 
-percentage_columns <- function(
-    data,
-    accuracy = 0.1
-) {
-    data %>%
-        dplyr::mutate(dplyr::across(
-            tidyselect:::where(is.numeric),
-            scales::percent,
-            accuracy = accuracy
-        )) %>%
-        return()
-}
-
 analysis <-
     params %>%
     magrittr::extract2("analysis") %>%
@@ -47,8 +34,16 @@ Column {.tabset .tabset-fade}
 analysis %>%
     magrittr::extract2("summary") %>%
     magrittr::extract2("metrics_table") %>%
-    percentage_columns() %>%
-    knitr::kable()
+    gt::gt(rowname_col = "Asset") %>%
+    gt::fmt_percent(tidyselect::everything()) %>%
+    gt::tab_style(
+        style = gt::cell_text(weight = "bold"),
+        locations = gt::cells_column_labels(tidyselect::everything())
+    ) %>%
+    gt::tab_options(
+        table.border.top.style = "hidden",
+        table.width = "100%"
+    )
 ```
 
 Gain

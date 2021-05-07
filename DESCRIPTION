@@ -21,6 +21,7 @@ Imports:
     fs,
     ggplot2,
     glue,
+    gt,
     here,
     httr,
     jsonlite,
