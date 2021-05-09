@@ -15,7 +15,7 @@ $('.navbar-inverse').removeClass('navbar-inverse').addClass('navbar-default');
 ```
 
 ```{r setup, include = FALSE}
-`%>%` <- magrittr::`%>%`
+library(RiskParityBrazil)
 
 percentage_columns <- function(
     data,
@@ -65,14 +65,6 @@ analysis %>%
     plotly::ggplotly()
 ```
 
-### DCA multiple
-```{r DCA multiple plot}
-analysis %>%
-    magrittr::extract2("gain") %>%
-    magrittr::extract2("dca_multiple_plot") %>%
-    plotly::ggplotly()
-```
-
 ### Rolling CAGR
 ```{r rolling CAGR plot}
 analysis %>%
@@ -114,13 +106,5 @@ Column {.tabset .tabset-fade}
 analysis %>%
     magrittr::extract2("relation") %>%
     magrittr::extract2("smooth_correlation_plot") %>%
-    plotly::ggplotly()
-```
-
-### Theoretical weight
-```{r theoretical weight plot}
-analysis %>%
-    magrittr::extract2("relation") %>%
-    magrittr::extract2("theoretical_weight_plot") %>%
     plotly::ggplotly()
 ```

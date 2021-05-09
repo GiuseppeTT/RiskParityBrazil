@@ -7,7 +7,7 @@ repository_url: https://github.com/GiuseppeTT/RiskParityBrazil
 ---
 
 ```{r setup, include = FALSE}
-`%>%` <- magrittr::`%>%`
+library(RiskParityBrazil)
 
 knitr::opts_chunk$set(echo = FALSE)
 ```
@@ -32,7 +32,7 @@ dashboard_names <-
 base_url <- "https://giuseppett.github.io/RiskParityBrazil/dashboard/"
 
 dashboard_names %>%
-    purrr::walk(~ cat(glue::glue("- [{.x}]({base_url}{RiskParityBrazil::name_dashboard_file(.x)})\n\n")))
+    purrr::walk(~ cat(glue::glue("- [{.x}]({base_url}{name_dashboard_file(.x)})\n\n")))
 ```
 
 ## Details

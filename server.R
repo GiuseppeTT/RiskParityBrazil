@@ -4,8 +4,8 @@ server <- function(
     session
 ) {
     data_pack <- reactive({
-        data %>%
-            RiskParityBrazil::pack_data(input$benchmark, input$assets, input$simulate_portfolio) %>%
+        complemented_data %>%
+            pack_data(input$benchmark, input$assets, input$simulate_portfolio) %>%
             return()
     })
 
@@ -44,15 +44,21 @@ server <- function(
 
         table <-
             table_data %>%
-            RiskParityBrazil:::table_metrics()
+            table_metrics()
 
         # TODO: refactor columns argument once {tidyselect} is available for {gt}
         table <-
             table %>%
-            gt() %>%
-            fmt_percent(columns = colnames(table)[-1]) %>%
-            cols_align(align = "left", columns = "Asset") %>%
-            tab_options(table.width = "100%")
+            gt(rowname_col = "Asset") %>%
+            fmt_percent(everything()) %>%
+            tab_style(
+                style = cell_text(weight = "bold"),
+                locations = cells_column_labels(everything())
+            ) %>%
+            tab_options(
+                table.border.top.style = "hidden",
+                table.width = "100%"
+            )
 
         return(table)
     })
@@ -63,37 +69,32 @@ server <- function(
 
         plot <- tidy_switch(
             input$y_variable,
-            "{y_variables$price}" := plot_base(plot_data, input$y_variable, RiskParityBrazil:::compute_price),
-            "{y_variables$dca_multiple}" := plot_base(plot_data, input$y_variable, RiskParityBrazil:::compute_dca_multiple),
-            "{y_variables$rolling_cagr}" := plot_base(plot_data, input$y_variable, RiskParityBrazil:::compute_rolling_cagr, window_size = window_size),
-            "{y_variables$smooth_volatility}" := plot_base(plot_data, input$y_variable, RiskParityBrazil:::compute_smooth_volatility, smoothing_factor = smoothing_factor),
-            "{y_variables$drawdown}" := plot_base(plot_data, input$y_variable, RiskParityBrazil:::compute_drawdown)
+            "{y_variables$price}" := plot_price(
+                plot_data
+            ),
+            "{y_variables$dca_multiple}" := plot_dca_multiple(
+                plot_data
+            ),
+            "{y_variables$rolling_cagr}" := plot_rolling_cagr(
+                plot_data,
+                window_size = yearly_window_size
+            ),
+            "{y_variables$smooth_volatility}" := plot_smooth_volatility(
+                plot_data,
+                smoothing_factor = weekly_smoothing_factor
+            ),
+            "{y_variables$drawdown}":= plot_drawdown(
+                plot_data
+            ),
+            "{y_variables$smooth_correlation}" := plot_smooth_correlation(
+                plot_data,
+                smoothing_factor = monthly_smoothing_factor
+            ),
+            "{y_variables$theoretical_weight}" := plot_theoretical_weight(
+                plot_data,
+                window_size = yearly_window_size
+            )
         )
-
-        labels <- scales::percent
-
-        limits <- tidy_switch(
-            input$y_variable,
-            "{y_variables$drawdown}" := c(-1, 0),
-            "{y_variables$smooth_correlation}" := c(-1, 1),
-            "{y_variables$theoretical_weight}" := c(0, 1),
-            NULL
-        )
-
-        scale_y <- tidy_switch(
-            input$y_scale,
-            "{y_scales$linear}" := scale_y_continuous,
-            "{y_scales$log}" := scale_y_log10
-        )
-
-        plot <-
-            plot +
-            scale_y(labels = labels, limits = limits) +
-            base_theme()
-
-        plot <-
-            plot %>%
-            RiskParityBrazil:::humanize_plot_labels()
 
         return(plot)
     })

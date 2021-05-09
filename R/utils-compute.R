@@ -17,7 +17,12 @@ compute_return <- function(
 compute_price <- function(
     return_
 ) {
-    price <- cumprod(1 + zero_first(return_))
+    return_ <-
+        return_ %>%
+        zero_na() %>%
+        zero_first()  # Enforce price = 1 on day one
+
+    price <- cumprod(1 + return_)
 
     return(price)
 }
@@ -25,7 +30,12 @@ compute_price <- function(
 compute_dca_multiple <- function(
     return_
 ) {
-    dca_multiple <- cumulative_dca(1 + zero_first(return_)) / seq_along(return_)
+    return_ <-
+        return_ %>%
+        zero_na() %>%
+        zero_first()  # Enforce DCA_multiple = 1 on day one
+
+    dca_multiple <- cumulative_dca(1 + return_) / seq_along(return_)
 
     return(dca_multiple)
 }
@@ -36,7 +46,7 @@ compute_rolling_cagr <- function(
 ) {
     return_ %>%
         slider::slide_dbl(
-            ~ trading_days_per$year * expm1(mean(log1p(.x))),
+            ~ trading_days_per$year * expm1(mean(log1p(.x), na.rm = TRUE)),
             .before = window_size,
             .complete = TRUE
         ) %>%
@@ -68,6 +78,19 @@ compute_drawdown <- function(
     return(drawdown)
 }
 
+compute_smooth_covariance <- function(
+    x_return,
+    y_return,
+    smoothing_factor
+) {
+    # Assumes 0 mean, which works great for daily returns
+    list(x_return, y_return) %>%
+        purrr::pmap_dbl(~ (.x - 0) * (.y - 0)) %>%
+        smooth(smoothing_factor) %>%
+        magrittr::multiply_by(trading_days_per$year) %>%
+        return()
+}
+
 compute_smooth_correlation <- function(
     x_return,
     y_return,
@@ -81,12 +104,8 @@ compute_smooth_correlation <- function(
         y_return %>%
         compute_smooth_volatility(smoothing_factor)
 
-    # Assumes 0 mean, which works great for daily returns
     smooth_covariance <-
-        list(x_return, y_return) %>%
-        purrr::pmap_dbl(~ (.x - 0) * (.y - 0)) %>%
-        smooth(smoothing_factor) %>%
-        magrittr::multiply_by(trading_days_per$year)
+        compute_smooth_covariance(x_return, y_return, smoothing_factor)
 
     smooth_correlation <-
         list(smooth_covariance, x_smooth_volatility, y_smooth_volatility) %>%

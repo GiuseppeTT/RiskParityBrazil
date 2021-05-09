@@ -1,8 +1,9 @@
-data <- tar_read(complemented_data)
+complemented_data <- tar_read(complemented_data)
 
 available_assets <-
-    data %>%
+    complemented_data %>%
     list_available(asset)
 
-window_size <- trading_days_per$year
-smoothing_factor <- RiskParityBrazil:::compute_smoothing_factor(half_life = trading_days_per$month)
+yearly_window_size <- days_per$year
+monthly_smoothing_factor <- compute_smoothing_factor(half_life = days_per$month)
+weekly_smoothing_factor <- compute_smoothing_factor(half_life = days_per$week)

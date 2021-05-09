@@ -65,10 +65,11 @@ pack_data <- function(
             asset ==   portfolio ~ asset_types$portfolio
         )) %>%
         dplyr::mutate(asset = factor(.data$asset, levels = c(benchmark, assets, portfolio))) %>%
-        dplyr::mutate(type = factor(
-            .data$type,
-            levels = c(asset_types$benchmark, asset_types$simple_asset, asset_types$portfolio))
-        )
+        dplyr::mutate(type = factor(.data$type, levels = asset_types))
+
+    data <-
+        data %>%
+        expand_data()
 
     data <-
         data %>%
@@ -112,4 +113,17 @@ compute_rebalance_weights <- function(
     rebalance_weights <- rebalance_weights[seq(window_size, nrow(rebalance_weights), by = rebalance_period)]
 
     return(rebalance_weights)
+}
+
+expand_data <- function(
+    data
+) {
+    # .data doest not work with tidyr::nesting
+    # https://github.com/tidyverse/tidyr/issues/971
+    data %>%
+        tidyr::complete(
+            tidyr::nesting(type, asset),
+            date = seq(min(.data$date), max(.data$date), by = "1 day")
+        ) %>%
+        return()
 }
