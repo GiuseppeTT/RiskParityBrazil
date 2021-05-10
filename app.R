@@ -3,9 +3,11 @@ library(targets)
 library(gt)
 
 library(shiny)
-library(shinydashboard)
+# library(shinydashboard)
+# library(shinydashboardPlus)
+library(bs4Dash)
 
-# TODO: tidyr::complete and use 365 days for window_size
+devtools::load_all()
 
 # TODO: shiny modules
 source("functions.R")

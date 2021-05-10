@@ -35,6 +35,12 @@ server <- function(
             "{return_types$relative}" := relativize_return(analysis_data),
         )
 
+        analysis_data <- tidy_switch(
+            input$investment_type,
+            "{investment_types$lump_sum}" := analysis_data,
+            "{investment_types$dca}" := dca_return(analysis_data),
+        )
+
         return(analysis_data)
     })
 
@@ -67,32 +73,40 @@ server <- function(
         plot_data <-
             analysis_data()
 
+        # TODO: this is computing everything!!
         plot <- tidy_switch(
             input$y_variable,
             "{y_variables$price}" := plot_price(
-                plot_data
+                plot_data,
+                y_scale = input$y_scale
             ),
             "{y_variables$dca_multiple}" := plot_dca_multiple(
-                plot_data
+                plot_data,
+                y_scale = input$y_scale
             ),
             "{y_variables$rolling_cagr}" := plot_rolling_cagr(
                 plot_data,
-                window_size = yearly_window_size
+                window_size = yearly_window_size,
+                y_scale = input$y_scale
             ),
             "{y_variables$smooth_volatility}" := plot_smooth_volatility(
                 plot_data,
-                smoothing_factor = weekly_smoothing_factor
+                smoothing_factor = weekly_smoothing_factor,
+                y_scale = input$y_scale
             ),
             "{y_variables$drawdown}":= plot_drawdown(
-                plot_data
+                plot_data,
+                y_scale = input$y_scale
             ),
             "{y_variables$smooth_correlation}" := plot_smooth_correlation(
                 plot_data,
-                smoothing_factor = monthly_smoothing_factor
+                smoothing_factor = monthly_smoothing_factor,
+                y_scale = input$y_scale
             ),
             "{y_variables$theoretical_weight}" := plot_theoretical_weight(
                 plot_data,
-                window_size = yearly_window_size
+                window_size = yearly_window_size,
+                y_scale = input$y_scale
             )
         )
 

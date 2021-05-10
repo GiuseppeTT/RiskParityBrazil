@@ -9,6 +9,22 @@ list_available <- function(
         return()
 }
 
+# TODO: move this to RiskParityBrazil package?
+investment_types <- list(
+    lump_sum = "Lump sum",
+    dca = "DCA"
+)
+
+dca_return <- function(
+    data
+) {
+    data %>%
+        group_by(asset) %>%
+        arrange(date) %>%
+        mutate(return = compute_return(compute_dca_multiple(return))) %>%
+        return()
+}
+
 base_theme <- function(
     # Empty
 ) {
